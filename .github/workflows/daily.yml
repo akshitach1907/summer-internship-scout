@@ -18,9 +18,15 @@ jobs:
       - name: Find new matching roles
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-          OPENAI_API_KEY: ${{ secrets.OPENAI_API_KEY }}
           GITHUB_REPOSITORY: ${{ github.repository }}
         run: python scout.py
+      - name: Upload coverage report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: internship-coverage-report
+          path: coverage_report.md
+          if-no-files-found: warn
       - name: Save previously seen roles
         run: |
           git config user.name "internship-scout[bot]"
